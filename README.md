@@ -15,5 +15,7 @@ The parent classes we will have in the game are the player, and the obstacles. H
 *Libraries/Codes to Use:*
 
 -random library
+
 -Use the tetris blocks as the obstacle courses
+
 -Use the mouse-detecting code from the Pygame tutorial to detect when the player clicks on the screen to click.
