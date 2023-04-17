@@ -1,4 +1,4 @@
-# Runer-Xtreme
+# Runner-Xtreme
 Create a Geometry Dash parody but the obstacles are random each time you die.
 
 **Project Proposal**
