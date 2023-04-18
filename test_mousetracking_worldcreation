@@ -1,0 +1,37 @@
+import pygame
+from player_copy import Player
+
+pygame.init()
+
+
+gameDisplay = pygame.display.set_mode((800,600))
+pygame.display.set_caption('runner-xtreme')
+clock = pygame.time.Clock()
+background_color = (255, 255, 0)
+gamer = Player(1, 5)
+sprites = pygame.sprite.Group()
+sprites.add(gamer)
+
+
+gameDisplay.fill(background_color)
+
+crashed = False
+
+sprites.draw(gameDisplay)
+while not crashed:
+    gamer.update()
+    sprites.update()
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            crashed = True 
+
+        print(event)
+    gamer.rect.x = gamer.position[0]
+    gamer.rect.y = gamer.position[1]
+    
+    gameDisplay.fill(background_color)
+    gameDisplay.blit(gamer.image, gamer.rect)
+    pygame.display.update()
+    clock.tick(60)
+
+pygame.quit()
