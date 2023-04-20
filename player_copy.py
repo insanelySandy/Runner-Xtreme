@@ -9,7 +9,7 @@ class Player(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.images = []
 
-        img = pygame.image.load(os.path.join('Images', 'chris_pratt_cringe.png')).convert()
+        img = pygame.image.load(os.path.join('Images', 'chris_pratt_cringe_tiny.png')).convert()
         self.images.append(img)
         self.image = self.images[0]
         self.rect = self.image.get_rect()
