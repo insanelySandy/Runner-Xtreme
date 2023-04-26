@@ -1,0 +1,199 @@
+import pygame
+from player import *
+import random
+
+#adding music
+pygame.init()
+pygame.mixer.init()
+
+background_song = "Music/Song.mp3"
+pygame.mixer.music.load(background_song)
+
+    #start time of song
+start_time = pygame.time.get_ticks()
+
+
+pygame.init()
+
+gamePlay = False
+died = False
+score = 0
+
+game_state = "start_menu"
+gameDisplay_width = 800
+gameDisplay_height = 600
+
+def draw_obstacle():
+    obstaclenum = random.randint(1,7)
+    if obstaclenum == 1:
+        hazard1 = Obstacle(5, 'standard_hill_if-you-made-it-this-far.png', (800, 250), 0)
+        sprites.add(hazard1)
+        return hazard1
+    elif obstaclenum == 2:
+        hazard2 = Obstacle(5, 'shortstack_hill.png', (800, 50), 0)
+        sprites.add(hazard2)
+        return hazard2
+    elif obstaclenum == 3:
+        hazard3 = Obstacle(5, 'shortstack_long_hill.png', (800, 50), 0)
+        sprites.add(hazard3)
+        return hazard3
+    elif obstaclenum == 4:
+        hazard4 = Obstacle(5, 'standard_hill.png', (800, 300), 0)
+        sprites.add(hazard4)
+        return hazard4
+    elif obstaclenum == 5:
+        hazard5 = Obstacle(5, 'standard_hill_you-cant-do-it.png', (800, 200), 0)
+        sprites.add(hazard5)
+        return hazard5
+    elif obstaclenum == 6:
+        hazard6 = Obstacle(5, 'standard_hill_ 3.png', (800, 210), 0)
+        sprites.add(hazard6)
+        return hazard6
+    elif obstaclenum == 7:
+        hazard7 = Obstacle(5, 'standard_hill_ p.png', (800, 210), 0)
+        sprites.add(hazard7)
+        return hazard7
+
+def draw_Obstacle_Border():
+    border = Obstacle(0, 'red_death_marker.png', (400, 600), 0)
+    sprites.add(border)
+
+def draw_start_menu():
+    gameDisplay.fill((0, 0, 0))
+    font = pygame.font.SysFont('comic sans', 40)
+    title = font.render('JUMPOR XTREME!', True, (255, 255, 255))
+    start_button = font.render('Press P to Play and Arrow Keys to Move', True, (255, 255, 255))
+    game_caption = font.render('           In the grim brightness', True, (255, 255, 255))
+    game_caption2 = font.render('           of the distant future...', True, (255, 255, 255))
+    game_caption3 = font.render('        There is only Jumping', True, (255, 255, 255))
+    gameDisplay.blit(title, (gameDisplay_width/2 - title.get_width()/2, gameDisplay_height/2 - title.get_height()/2))
+    gameDisplay.blit(start_button, (gameDisplay_width/2 - start_button.get_width()/2, gameDisplay_height/2 + start_button.get_height()/2))
+    gameDisplay.blit(game_caption, (gameDisplay_width/7 - game_caption.get_width()/7, gameDisplay_height/7 + game_caption.get_height()/7))
+    gameDisplay.blit(game_caption2, (gameDisplay_width/5 - game_caption2.get_width()/5, gameDisplay_height/5 + game_caption2.get_height()/5))
+    gameDisplay.blit(game_caption3, (gameDisplay_width/4 - game_caption3.get_width()/4, gameDisplay_height/4 + game_caption3.get_height()/4))
+    pygame.display.update()
+
+def draw_game_over_screen():
+    gameDisplay.fill((255, 0, 0))
+    font = pygame.font.SysFont('comic sans', 40)
+    title = font.render('You are dead. . . doofus.', True, (255, 255, 255))
+    restart_button = font.render('Press R to restart or ESC to quit', True, (255, 255, 255))
+    quit_button = font.render('Press ESC to quit. . . wuss.', True, (255, 255, 255))
+    gameDisplay.blit(title, (gameDisplay_width/2 - title.get_width()/2, gameDisplay_height/2 - title.get_height()/2))
+    gameDisplay.blit(restart_button, (gameDisplay_width/2 - restart_button.get_width()/2, gameDisplay_height/2 + restart_button.get_height()/2))
+    pygame.display.update()
+
+#display
+gameDisplay = pygame.display.set_mode((800,600))
+pygame.display.set_caption('jumpor-xtreme')
+clock = pygame.time.Clock()
+if(gamePlay == False):
+    pygame.mixer.music.stop()
+    background_color = (255, 255, 0)
+    gamer = Player(5, 5)
+    sprites = pygame.sprite.Group()
+    sprites.add(gamer)
+
+
+gameDisplay.fill(background_color)
+
+#mouse pressing detection
+from pygame.mouse import get_pressed
+
+
+
+
+crashed = False
+
+
+
+sprites.draw(gameDisplay)
+while not crashed:
+
+
+    if(gamePlay == False and died == False):
+        pygame.mixer.music.play()
+        draw_start_menu()
+        background_color = (255, 255, 0)
+        gamer = Player(50, 50)
+        currenthazard = draw_obstacle()
+        hazardroof = Obstacle(0, 'red_death_marker.png', (0, -140), 0)
+        sprites = pygame.sprite.Group()
+        sprites.add(gamer)
+        sprites.add(currenthazard)
+        sprites.add(hazardroof)
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_p:
+                    gamePlay = True
+                elif event.key == pygame.K_ESCAPE:
+                    crashed = True
+    elif(gamePlay == False and died == True):
+        draw_game_over_screen()
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_r:
+                    gamePlay = False
+                    died = False
+                elif event.key == pygame.K_ESCAPE:
+                    crashed = True
+
+    for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_p:
+                gamePlay = True
+            elif event.key == pygame.K_ESCAPE:
+                crashed = True
+
+    if(gamePlay == True):
+
+        background_color = (255, 255, 255)
+        
+        if currenthazard.distancetraveled > 1000:
+            currenthazard = draw_obstacle()
+        if currenthazard.distancetraveled > 1000:
+            score = score + 1
+
+        currenthazard.update()
+        sprites.update()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                crashed = True 
+
+            print(event)
+        gamer.rect.x = gamer.position[0]
+        gamer.rect.y = gamer.position[1]
+        currenthazard.rect.x = currenthazard.position[0]
+        currenthazard.rect.y = currenthazard.position[1]
+        hazardroof.rect.x = hazardroof.position[0]
+        hazardroof.rect.y = hazardroof.position[1]
+        
+        gameDisplay.fill(background_color)
+        gameDisplay.blit(gamer.image, gamer.rect)
+        gameDisplay.blit(currenthazard.image, currenthazard.rect)
+        gameDisplay.blit(hazardroof.image, hazardroof.rect)
+        pygame.display.update()
+        clock.tick(55)
+        if pygame.Rect.colliderect(gamer.rect, currenthazard.rect):
+            died = True
+            gamePlay = False
+        elif pygame.Rect.colliderect(gamer.rect, hazardroof.rect):
+            died = True
+            gamePlay = False
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                crashed = True
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    gamer.up()
+                if event.key == pygame.K_DOWN:
+                    gamer.down()
+                if event.key == pygame.K_RIGHT:
+                    gamer.right()
+                if event.key == pygame.K_LEFT:
+                    gamer.left()
+                elif event.key == pygame.K_ESCAPE:
+                    crashed = True
+                
+pygame.quit()
+
