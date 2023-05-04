@@ -76,7 +76,7 @@ def draw_start_menu():
 def draw_game_over_screen():
     gameDisplay.fill((255, 0, 0))
     font = pygame.font.SysFont('comic sans', 40)
-    title = font.render('You are dead. . . doofus.', True, (255, 255, 255))
+    title = font.render('You are dead... Doofus Your score was '+str(gamer.score)+'.', True, (255, 255, 255))
     restart_button = font.render('Press R to restart or ESC to quit', True, (255, 255, 255))
     quit_button = font.render('Press ESC to quit. . . wuss.', True, (255, 255, 255))
     gameDisplay.blit(title, (gameDisplay_width/2 - title.get_width()/2, gameDisplay_height/2 - title.get_height()/2))
@@ -90,7 +90,7 @@ clock = pygame.time.Clock()
 if(gamePlay == False):
     pygame.mixer.music.stop()
     background_color = (255, 255, 0)
-    gamer = Player(5, 5)
+    gamer = Player(5, 5, 0)
     sprites = pygame.sprite.Group()
     sprites.add(gamer)
 
@@ -115,7 +115,7 @@ while not crashed:
         pygame.mixer.music.play()
         draw_start_menu()
         background_color = (255, 255, 0)
-        gamer = Player(50, 50)
+        gamer = Player(50, 50, 0)
         currenthazard = draw_obstacle()
         hazardroof = Obstacle(0, 'red_death_marker.png', (0, -140), 0)
         sprites = pygame.sprite.Group()
@@ -146,14 +146,14 @@ while not crashed:
                 crashed = True
 
     if(gamePlay == True):
-
+        
         background_color = (255, 255, 255)
         
         if currenthazard.distancetraveled > 1000:
             currenthazard = draw_obstacle()
         if currenthazard.distancetraveled > 1000:
             score = score + 1
-
+        gamer.scoreupdate()
         currenthazard.update()
         sprites.update()
         for event in pygame.event.get():

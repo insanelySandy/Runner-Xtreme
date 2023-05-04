@@ -2,10 +2,11 @@ import pygame
 import os
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, walkspeed, jumpheight):
+    def __init__(self, walkspeed, jumpheight, score):
         self.walkspeed = walkspeed
         self.jumpheight = jumpheight
         self.position = (50,100)
+        self.score = score
         pygame.sprite.Sprite.__init__(self)
         self.images = []
 
@@ -22,6 +23,8 @@ class Player(pygame.sprite.Sprite):
         self.position = (self.position[0], self.position[1] + self.jumpheight)
     def left(self):
         self.position = (self.position[0] - self.walkspeed, self.position[1])
+    def scoreupdate(self):
+        self.score = self.score + 1
 
 
 class Obstacle(pygame.sprite.Sprite):
